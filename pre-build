@@ -13,7 +13,7 @@ destroy_temp_dir() {
   cd "$TMPDIR" && git clone -q "$DOKKU_ROOT/$APP" repo > /dev/null 2>&1
 
   if [[ -d "$TMPDIR/repo/.dokku" ]] && [[ "$(ls -A "$TMPDIR/repo/.dokku")" ]]; then
-    output=$(cp -r "$TMPDIR/repo/.dokku/." "$DOKKU_ROOT/$APP")
+    output=$(cp -r -L "$TMPDIR/repo/.dokku/." "$DOKKU_ROOT/$APP")
     dokku_log_verbose_quiet "$output"
   fi
 }
