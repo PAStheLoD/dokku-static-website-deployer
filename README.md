@@ -1,4 +1,4 @@
-# dokku-supply-config [![Build Status](https://img.shields.io/travis/dokku-community/dokku-supply-config.svg?branch=master "Build Status")](https://travis-ci.org/josegonzalez/dokku-supply-config)
+# bootlegged dokku-supply-config
 
 Supply dokku configuration files within your app repository.
 
@@ -11,7 +11,7 @@ Supply dokku configuration files within your app repository.
 
 ```shell
 # on 0.4.x
-dokku plugin:install https://github.com/josegonzalez/dokku-supply-config.git supply-config
+dokku plugin:install https://github.com/PAStheLoD/dokku-supply-config.git supply-config
 ```
 
 ## hooks
