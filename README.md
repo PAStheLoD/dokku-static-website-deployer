@@ -2,15 +2,32 @@
 
 Build modern fancy SPA web3.0 apps with a Dockerfile ( https://hub.docker.com/r/pasthelod/nodejs/ ), and then get the resulting /dist from the container, and host it via the nginx docker already uses.
 
-Recommended nginx.conf.sigil (does not support SSL/TLS/LetsEncrypt yet :o):
+Recommended nginx.conf.sigil:
 
 ```
 server {
-  listen      [::]:{{ .NGINX_PORT }};
-  listen      {{ .NGINX_PORT }};
+  listen      [::]:80;
+  listen      80;
   server_name {{ .NOSSL_SERVER_NAME }};
+
   access_log  /var/log/nginx/{{ .APP }}-access.log;
   error_log   /var/log/nginx/{{ .APP }}-error.log;
+
+  return 301 https://$http_host:443$request_uri;
+  
+}
+
+server {
+  listen      [::]:443 ssl spdy;
+  listen      443 ssl spdy;
+  server_name {{ .NOSSL_SERVER_NAME }};
+
+  access_log  /var/log/nginx/{{ .APP }}-access.log;
+  error_log   /var/log/nginx/{{ .APP }}-error.log;
+
+  ssl_certificate     {{ .APP_SSL_PATH }}/server.crt;
+  ssl_certificate_key {{ .APP_SSL_PATH }}/server.key;
+  ssl_protocols       TLSv1 TLSv1.1 TLSv1.2;
 
   gzip on;
   gzip_min_length  1100;
@@ -23,12 +40,6 @@ server {
 	root {{ .DOKKU_ROOT }}/{{ .APP }}/static-website-data/;
   }
   include {{ .DOKKU_ROOT }}/{{ .APP }}/nginx.conf.d/*.conf;
-}
-
-upstream {{ .APP }} {
-{{ range .DOKKU_APP_LISTENERS | split " " }}
-  server {{ . }};
-{{ end }}
 }
 ```
 
