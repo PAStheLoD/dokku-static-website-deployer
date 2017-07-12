@@ -1,4 +1,4 @@
 [plugin]
-description = "supply dokku configuration files within your app repository"
+description = "herp derp static websites"
 version = "1.0.0"
 [plugin.config]

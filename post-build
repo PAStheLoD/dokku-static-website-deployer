@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+set -eo pipefail; [[ $DOKKU_TRACE ]] && set -x
+source "$PLUGIN_CORE_AVAILABLE_PATH/common/functions"
+
+destroy_temp_dir() {
+  local APP="$1"
+  local TMPDIR
+  TMPDIR=$(mktemp -d)
+  trap 'rm -rf "$TMP_WORK_DIR" > /dev/null' RETURN
+
+  dokku_col_log_info1_quiet "DADADADADADADADAAAADAAAAAAAA!"
+
+  local IMAGE
+  IMAGE=$(get_app_image_name $APP)
+
+  docker run --rm -v $TMPDIR:/dist $IMAGE
+  rm -rf "$DOKKU_ROOT/$APP/static-website-data"
+  cp -r -L "$TMPDIR/." "$DOKKU_ROOT/$APP/static-website-data"
+  dokku_log_verbose_quiet "eh"
+}
+
+destroy_temp_dir "$1"
