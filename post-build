@@ -14,13 +14,17 @@ destroy_temp_dir() {
 
   dokku_col_log_info1_quiet "Running container $IMAGE with default CMD to build stuff!"
 
-  docker run --rm -v $TMPDIR:/dist $IMAGE
+  echo $(docker run --rm -v $TMPDIR:/dist $IMAGE 2>&1)
+
   rm -rf "$DOKKU_ROOT/$APP/static-website-data"
   cp -r -L "$TMPDIR/." "$DOKKU_ROOT/$APP/static-website-data"
   chmod o+rx "$DOKKU_ROOT/$APP/static-website-data"
-  [[ ls -1 "$DOKKU_ROOT/$APP/static-website-data" | wc -l = 0 ]] && { dokku_log_fail "ERROR!! No files copied. Check your Dockerfile, it should copy things into /dist." }
+  
+  [[ ls -1 "$DOKKU_ROOT/$APP/static-website-data" | wc -l = 0 ]] && { dokku_log_fail "ERROR!! No files copied. Check your Dockerfile, it should copy things into /dist." ; }
   
   dokku_log_verbose_quiet "Copied /dist"
 }
 
 destroy_temp_dir "$1"
+
+plugn trigger post-domains-update "$APP"
