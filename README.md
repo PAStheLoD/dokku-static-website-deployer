@@ -43,6 +43,12 @@ server {
 }
 ```
 
+Recommended to skip deploy:
+
+```
+dokku config:set <app> DOKKU_SKIP_DEPLOY=true
+```
+
 ## requirements
 
 - dokku 0.4.0+
