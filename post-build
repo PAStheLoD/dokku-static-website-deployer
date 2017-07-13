@@ -23,7 +23,7 @@ destroy_temp_dir() {
   cp -r -L "$TMPDIR/." "$DOKKU_ROOT/$APP/static-website-data"
   chmod o+rx "$DOKKU_ROOT/$APP/static-website-data"
   
-  [[ ls -1 "$DOKKU_ROOT/$APP/static-website-data" | wc -l = 0 ]] && { dokku_log_fail "ERROR!! No files copied. Check your Dockerfile, it should copy things into /dist." ; }
+  [[ $(ls -1 "$DOKKU_ROOT/$APP/static-website-data" | wc -l) = 0 ]] && { dokku_log_fail "ERROR!! No files copied. Check your Dockerfile, it should copy things into /dist." ; }
   
   dokku_log_verbose_quiet "Copied /dist"
 }
