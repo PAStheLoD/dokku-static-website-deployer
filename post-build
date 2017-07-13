@@ -14,7 +14,10 @@ destroy_temp_dir() {
 
   dokku_col_log_info1_quiet "Running container $IMAGE with default CMD to build stuff!"
 
-  echo $(docker run --rm -v $TMPDIR:/dist $IMAGE 2>&1)
+  ENV_VARS=""
+  [[ -r $DOKKU_ROOT/$APP/ENV ]] && local ENV_VARS=$(grep -Eo "export ([a-zA-Z_][a-zA-Z0-9_]*=.*)" ENV | cut -d" " -f2- | sed -r 's/^(.*)$/-e \1/g' | tr '\n' ' ')
+
+  echo $(docker run --rm -e DOKKU_APP="$APP" $ENV_VARS -v $TMPDIR:/dist $IMAGE 2>&1)
 
   rm -rf "$DOKKU_ROOT/$APP/static-website-data"
   cp -r -L "$TMPDIR/." "$DOKKU_ROOT/$APP/static-website-data"
