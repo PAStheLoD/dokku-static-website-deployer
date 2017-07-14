@@ -18,6 +18,8 @@ destroy_temp_dir() {
   [[ -r $DOKKU_ROOT/$APP/ENV ]] && {
       grep -Eo "export ([a-zA-Z_][a-zA-Z0-9_]*=.*)" $DOKKU_ROOT/$APP/ENV | cut -d" " -f2- > $DOKKU_ROOT/$APP/ENV_VARS.file_no_export
       ENV_VARS=--env-file "$DOKKU_ROOT/$APP/ENV_VARS.file_no_export"
+      chown dokku:docker "$DOKKU_ROOT/$APP/ENV_VARS.file_no_export"
+      chmod g+r "$DOKKU_ROOT/$APP/ENV_VARS.file_no_export"
   }
   echo $(docker run --rm -e DOKKU_APP="$APP" $ENV_VARS -v $TMPDIR:/dist $IMAGE 2>&1)
   
