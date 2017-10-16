@@ -6,7 +6,7 @@ destroy_temp_dir() {
   local APP="$1"
   local TMPDIR
   TMPDIR=$(mktemp -d)
-  trap 'rm -rf "$TMP_WORK_DIR" "$TMPDIR" "$DOKKU_ROOT/$APP/ENV_VARS.file_no_export" > /dev/null' RETURN
+  trap 'sudo rm -rf "$TMPDIR" ; rm -rf "$TMP_WORK_DIR" "$DOKKU_ROOT/$APP/ENV_VARS.file_no_export" > /dev/null' RETURN
 
 
   local IMAGE
