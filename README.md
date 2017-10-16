@@ -106,6 +106,7 @@ Recommended nginx.conf.sigil:
         }
 
     {{ end }}
+{{ end }}
 
 {{ range $upstream_port := $.PROXY_UPSTREAM_PORTS | split " " }}
     upstream {{ $.APP }}-{{ $upstream_port }} {
