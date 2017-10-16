@@ -70,10 +70,10 @@ Recommended nginx.conf.sigil:
         server {
             listen      [::]:80;
             listen      80;
-            server_name {{ .NOSSL_SERVER_NAME }};
+            server_name {{ $.NOSSL_SERVER_NAME }};
 
-            access_log  /var/log/nginx/{{ .APP }}-access.log;
-            error_log   /var/log/nginx/{{ .APP }}-error.log;
+            access_log  /var/log/nginx/{{ $.APP }}-access.log;
+            error_log   /var/log/nginx/{{ $.APP }}-error.log;
 
             return 301 https://$http_host:443$request_uri;
         }
@@ -81,13 +81,13 @@ Recommended nginx.conf.sigil:
         server {
             listen      [::]:443 ssl spdy;
             listen      443 ssl spdy;
-            server_name {{ .NOSSL_SERVER_NAME }}  ;
+            server_name {{ $.NOSSL_SERVER_NAME }}  ;
 
-            access_log  /var/log/nginx/{{ .APP }}-access.log;
-            error_log   /var/log/nginx/{{ .APP }}-error.log;
+            access_log  /var/log/nginx/{{ $.APP }}-access.log;
+            error_log   /var/log/nginx/{{ $.APP }}-error.log;
 
-            ssl_certificate     {{ .APP_SSL_PATH }}/server.crt;
-            ssl_certificate_key {{ .APP_SSL_PATH }}/server.key;
+            ssl_certificate     {{ $.APP_SSL_PATH }}/server.crt;
+            ssl_certificate_key {{ $.APP_SSL_PATH }}/server.key;
             ssl_protocols       TLSv1 TLSv1.1 TLSv1.2;
 
             #  plenuum plenuum
@@ -100,12 +100,13 @@ Recommended nginx.conf.sigil:
             gzip_comp_level  6;
 
             location / {
-                 root {{ .DOKKU_ROOT }}/{{ .APP }}/static-website-data/;
+                 root {{ $.DOKKU_ROOT }}/{{ $.APP }}/static-website-data/;
             }
-            include {{ .DOKKU_ROOT }}/{{ .APP }}/nginx.conf.d/*.conf;
+            include {{ $.DOKKU_ROOT }}/{{ $.APP }}/nginx.conf.d/*.conf;
         }
 
     {{ end }}
+
 {{ end }}
 
 {{ range $upstream_port := $.PROXY_UPSTREAM_PORTS | split " " }}
